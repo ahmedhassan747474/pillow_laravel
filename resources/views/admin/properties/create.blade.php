@@ -289,9 +289,9 @@ html,
                                       </div>
 
                                       <label>{{ __('Drag Your Address') }}</label>
-                                      {{-- <div id="map_canvas" class="map-canvas"></div> --}}
-                                      {{-- <input type="text" id="default_latitude" placeholder="Latitude"/>
-                                      <input type="text" id="default_longitude" placeholder="Longitude"/> --}}
+                                       <div id="map_canvas" class="map-canvas"></div>
+                                 <input type="text" id="default_latitude" placeholder="Latitude"/>
+                                      <input type="text" id="default_longitude" placeholder="Longitude"/>
                                       <div id="map_canvas"></div>
 
                                       <input type="hidden" name ="latitude" id="default_latitude" value="00.00">
