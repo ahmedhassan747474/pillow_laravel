@@ -24,6 +24,6 @@ class PropertyList extends Model
         } else {
             return null;
         }
-        
+
     }
 }
