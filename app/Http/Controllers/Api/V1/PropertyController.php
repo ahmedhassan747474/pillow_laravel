@@ -1294,10 +1294,11 @@ class PropertyController extends BaseController
         $property= Property::select("*", DB::raw("6371 * acos(cos(radians(" . $request->latitude . "))
                                 * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $request->longitude . "))
                                 + sin(radians(" .$request->latitude. ")) * sin(radians(latitude))) AS distance"));
-        $property          =       $property->having('distance', '<', $request->distance??100);
+        $property          =       $property->having('distance', '<', $request->distance??100000);
         $property          =       $property->orderBy('distance', 'asc');
 
         $property          =       $property->get();
+        $property          =       Property::get();
 
     	return response()->json([
     		'data' 			=> $this->property_transformer->transformCollection($property),
