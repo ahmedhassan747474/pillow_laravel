@@ -78,7 +78,7 @@ class PropertyTransformer extends Transformer
             $return['traveler_date']     = date('Y-m-d', strtotime($data->traveler_date));
             $return['traveler_number']   = $data->traveler_number;
             $return['through_id']        = $data->through_id;
-            $return['through_name']      = $language == 'ar' ? $data->through->name_ar : $data->through->name_en;
+            $return['through_name']      = $language == 'ar' ? $data->through->name_ar??'' : $data->through->name_en;
         }
 
         if ($data->type == '7') {
