@@ -74,7 +74,7 @@ class PropertyTransformer extends Transformer
 
         if ($data->type == '6') {
             $return['book_list_id']      = $data->book_list_id;
-            $return['book_list_name']    =$data->bookList->name_ar ;
+            $return['book_list_name']    =$data->bookList->name_ar ??"" ;
             $return['traveler_date']     = date('Y-m-d', strtotime($data->traveler_date));
             $return['traveler_number']   = $data->traveler_number;
             $return['through_id']        = $data->through_id;
