@@ -224,19 +224,19 @@
                                         </div>
                                     </div>
 
-                                    {{-- <div class="form-group">
+                                 <div class="form-group">
                                         <label>{{trans('common.Enter Latitude')}}</label>
                                         <div class="controls">
                                             <input type="text" name="latitude" class="form-control" pattern="^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$" data-error="{{trans('common.The numeric field may only contain numeric characters.')}}" placeholder="{{trans('common.Enter Latitude')}}" value="{{ $apartment->latitude }}" required>
                                         </div>
-                                    </div> --}}
+                                    </div>
 
-                                    {{-- <div class="form-group">
+                                    <div class="form-group">
                                         <label>{{trans('common.Enter Longitude')}}</label>
                                         <div class="controls">
                                             <input type="text" name="longitude" class="form-control" required pattern="^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$" data-error="{{trans('common.The numeric field may only contain numeric characters.')}}" placeholder="{{trans('common.Enter Longitude')}}" value="{{ $apartment->longitude }}">
                                         </div>
-                                    </div> --}}
+                                    </div>
 
                                     <div class="form-group">
                                         <label>{{trans('common.Enter Price')}}</label>

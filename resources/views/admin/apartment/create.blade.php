@@ -309,7 +309,7 @@ html,
 
 
 
-                                    {{-- <div class="form-group">
+                                   <div class="form-group">
                                         <label for="location_input">{{ __('common.Full address') }}</label>
                                         <input type="text" placeholder="{{__('common.Full address')}}" name ="full_address" class="form-control" id="location_input" required value="" autocomplete="off">
                                       </div>
@@ -326,17 +326,17 @@ html,
                                         <div class="controls">
                                             <input type="text" id="default_longitude" name="longitude" class="form-control" required pattern="^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,16})?))$" data-error="{{trans('common.The numeric field may only contain numeric characters.')}}" placeholder="{{trans('common.Enter Longitude')}}" value="{{ old('longitude') }}">
                                         </div>
-                                    </div> --}}
+                                    </div>
 
 
-                                      {{-- <label>{{ __('Drag Your Address') }}</label> --}}
-                                      {{-- <div id="map_canvas" class="map-canvas"></div> --}}
-                                      {{-- <input type="text" id="default_latitude" placeholder="Latitude"/>
-                                      <input type="text" id="default_longitude" placeholder="Longitude"/> --}}
-                                      {{-- <div id="map_canvas" ></div> --}}
+                                       <label>{{ __('Drag Your Address') }}</label>
+                                       <div id="map_canvas" class="map-canvas"></div>
+                                     <input type="text" id="default_latitude" placeholder="Latitude"/>
+                                      <input type="text" id="default_longitude" placeholder="Longitude"/>
+                                       <div id="map_canvas" ></div>
 
-                                      {{-- <input type="hidden" name ="latitude" id="default_latitude" value="00.00">
-                                      <input type="hidden" name ="longitude" id="default_longitude" value="00.00"> --}}
+                                 <input type="hidden" name ="latitude" id="default_latitude" value="00.00">
+                                      <input type="hidden" name ="longitude" id="default_longitude" value="00.00">
 
 
                                 </div>
