@@ -22,10 +22,10 @@ use App\Transformers\Admin\PropertyTransformer;
 
 class HotelController extends BaseController
 {
-	function __construct(PropertyTransformer $property_transformer) 
+	function __construct(PropertyTransformer $property_transformer)
     {
         $this->property_transformer = $property_transformer;
-        
+
         $this->middleware(function ($request, $next) {
             checkPermission('is_hotel');
             return $next($request);
@@ -64,7 +64,7 @@ class HotelController extends BaseController
             $attribute->select('id', 'name_en as name');
         }
         $attributes = $attribute->get();
-        
+
         return view('admin.hotel.create', compact('countries', 'attributes'));
     }
 
@@ -95,12 +95,12 @@ class HotelController extends BaseController
             'per'				=> 'required'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
         }
-                        
+
         $hotel = Property::create([
             'name_en'       	=> $request->name_en,
             'name_ar'       	=> $request->name_ar,
@@ -221,7 +221,7 @@ class HotelController extends BaseController
         $attributes = $attribute->get();
 
         // dd($hotel->propertyImage[0]->only_name, $hotel->propertyImage[0]->name);
-        
+
         return view('admin.hotel.edit', compact('hotel', 'countries', 'cities', 'attributes'));
     }
 
@@ -254,7 +254,7 @@ class HotelController extends BaseController
             'per'               => 'required'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
@@ -304,7 +304,7 @@ class HotelController extends BaseController
                 ]);
             }
         }
-        
+
         $success = trans('common.Updated Successfully');
 
         return redirect()->route('show_hotel', $hotel->id)->with('success', $success);
@@ -321,7 +321,7 @@ class HotelController extends BaseController
         // return redirect()->route('users');
         return response()->json(['success' => 'Deleted Successfully']);
     }
-    
+
     public function blockProperty(Request $request)
     {
         $id = $request->id;
@@ -349,7 +349,7 @@ class HotelController extends BaseController
         $img = Image::make($image)->resize(400, 400, function ($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
-        })->save(public_path('images/properties/').$imageRename);
+        })->save('images/'.$imageRename);
 
         return response()->json(['message' => 'uploaded', 'data' => $imageRename, 'code' => 200]);
     }
