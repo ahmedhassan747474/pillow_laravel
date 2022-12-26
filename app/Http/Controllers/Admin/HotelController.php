@@ -345,11 +345,12 @@ class HotelController extends BaseController
         $path           = public_path("images\properties");
 
         if(!File::exists($path)) File::makeDirectory($path, 775, true);
-
-        $img = Image::make($image)->resize(400, 400, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        })->save('images/'.$imageRename);
+        $path = public_path('images/properties/' . $imageRename);
+        Image::make($image->getRealPath())->resize(468, 249)->save($path);
+//        $img = Image::make($image)->resize(400, 400, function ($constraint) {
+//            $constraint->aspectRatio();
+//            $constraint->upsize();
+//        })->save(public_path('images/properties/').$imageRename);
 
         return response()->json(['message' => 'uploaded', 'data' => $imageRename, 'code' => 200]);
     }
