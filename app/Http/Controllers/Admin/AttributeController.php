@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\File;
 
 class AttributeController extends BaseController
 {
-    function __construct() 
+    function __construct()
     {
         $this->middleware(function ($request, $next) {
             checkPermission('is_attributes');
@@ -42,7 +42,7 @@ class AttributeController extends BaseController
     public function create()
     {
         checkGate('can_create');
-        
+
         return view('admin.attribute.create');
     }
 
@@ -56,7 +56,7 @@ class AttributeController extends BaseController
             // 'image'         	=> 'required'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
@@ -74,9 +74,9 @@ class AttributeController extends BaseController
             $img = Image::make($image)->resize(400, 400, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/attributes/').$imageRename);
+            })->save('images/attributes/'.$imageRename);
         }
-                        
+
         $attribute = Attribute::create([
             // 'name_en'       	=> $request->name_en,
             'name_ar'       	=> $request->name_ar,
@@ -85,7 +85,7 @@ class AttributeController extends BaseController
           	// 'image'				=> $imageRename,
           	'status'			=> '1'
         ]);
-        
+
         $success = trans('common.created Successfully');
         return redirect()->route('show_attribute', $attribute->id)->with('success', $success);
     }
@@ -110,7 +110,7 @@ class AttributeController extends BaseController
         checkGate('can_edit');
 
         $attribute = Attribute::find($id);
-        
+
         return view('admin.attribute.edit', compact('attribute'));
     }
 
@@ -126,7 +126,7 @@ class AttributeController extends BaseController
             'image'         	=> 'nullable'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
@@ -145,7 +145,7 @@ class AttributeController extends BaseController
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/attributes/').$imageRename);
+            })->save('images/attributes/'.$imageRename);
 
             $upload_image   = Attribute::where('id', $attribute->id)->update(['image' => $imageRename]);
 
@@ -158,7 +158,7 @@ class AttributeController extends BaseController
             // 'value_en'    		=> $request->value_en,
             // 'value_ar'    		=> $request->value_ar
         ]);
-        
+
         $success = trans('common.Updated Successfully');
 
         // return redirect()->route('show_attribute', $attribute->id)->with('success', $success);
@@ -175,7 +175,7 @@ class AttributeController extends BaseController
 
         return response()->json(['success' => 'Deleted Successfully']);
     }
-    
+
     public function blockAttribute(Request $request)
     {
         $id = $request->id;

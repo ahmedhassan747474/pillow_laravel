@@ -346,7 +346,7 @@ class HotelController extends BaseController
 
 
         if(!File::exists($path)) File::makeDirectory($path, 775, true);
-        $path = 'images/properties/' . $imageRename;
+
 
         $img = Image::make($image)->resize(400, 400, function ($constraint) {
             $constraint->aspectRatio();

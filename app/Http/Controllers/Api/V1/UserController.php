@@ -483,7 +483,7 @@ class UserController extends BaseController
                 $img = Image::make($image)->resize(null, 700, function ($constraint) {
                     $constraint->aspectRatio();
                     $constraint->upsize();
-                })->save(public_path('images/users/').$imageRename);
+                })->save('images/users/'.$imageRename);
 
                 $upload_image   = User::where('id', $user->id)->update(['image' => $imageRename]);
 

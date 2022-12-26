@@ -349,7 +349,7 @@ class PropertyController extends BaseController
         $img = Image::make($image)->resize(400, 400, function ($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
-        })->save(public_path('images/properties/').$imageRename);
+        })->save('images/properties/'.$imageRename);
 
         return response()->json(['message' => 'uploaded', 'data' => $imageRename, 'code' => 200]);
     }

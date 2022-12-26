@@ -90,7 +90,7 @@ class PropertyListController extends Controller
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/property_list/').$imageRename);
+            })->save('images/property_list/'.$imageRename);
 
             // $upload_image   = PropertyList::where('id', $property->id)->update(['image' => $imageRename]);
 
@@ -147,7 +147,7 @@ class PropertyListController extends Controller
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/property_list/').$imageRename);
+            })->save('images/property_list/'.$imageRename);
 
             $upload_image   = PropertyList::where('id', $property->id)->update(['image' => $imageRename]);
 

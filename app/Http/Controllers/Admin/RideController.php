@@ -26,7 +26,7 @@ use App\Attribute;
 
 class RideController extends Controller
 {
-    function __construct(PropertyTransformer $property_transformer) 
+    function __construct(PropertyTransformer $property_transformer)
     {
         $this->property_transformer = $property_transformer;
 
@@ -56,7 +56,7 @@ class RideController extends Controller
             $results->select('id', 'name_en as name', 'flag', 'code', 'latitude', 'longitude');
         }
         $countries = $results->get();
-        
+
         return view('admin.ride.create', compact('countries'));
     }
 
@@ -71,15 +71,15 @@ class RideController extends Controller
             'country'       => 'required',
             'image'         => 'nullable|image',
             'email'         => 'required|email|unique:users,email',
-            'password'      => 'required|confirmed'            
+            'password'      => 'required|confirmed'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
         }
-        
+
         if($request->has('image')){
             $image          = $request->image;
             $extension      = $image->getClientOriginalExtension();
@@ -92,13 +92,13 @@ class RideController extends Controller
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/users/').$imageRename);
+            })->save('images/users/'.$imageRename);
         } else {
             $imageRename = 'user_default.png';
         }
-        
+
         $request['password'] = bcrypt($request->password);
-        
+
         $ride = User::create([
             'name'                  =>  $request->name,
             'image'                 =>  $imageRename,
@@ -158,7 +158,7 @@ class RideController extends Controller
             $results->select('id', 'name_en as name', 'flag', 'code', 'latitude', 'longitude');
         }
         $countries = $results->get();
-        
+
         return view('admin.ride.edit', compact('ride', 'countries'));
     }
 
@@ -178,7 +178,7 @@ class RideController extends Controller
             'password'      => 'nullable|confirmed'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
@@ -197,7 +197,7 @@ class RideController extends Controller
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/users/').$imageRename);
+            })->save('images/users/'.$imageRename);
 
             $upload_image   = User::where('id', $ride->id)->update(['image' => $imageRename]);
 
@@ -215,7 +215,7 @@ class RideController extends Controller
             $password = bcrypt($request->password);
             $updatePassword   = User::where('id', $ride->id)->update(['password' => $password]);
         }
-        
+
         $ride->update([
             'name'                  =>  $request->name,
             'surename'              =>  $request->surename,
@@ -246,7 +246,7 @@ class RideController extends Controller
         // return redirect()->route('users');
         return response()->json(['success' => 'Deleted Successfully']);
     }
-    
+
     public function blockRide(Request $request)
     {
         $id = $request->user_id;

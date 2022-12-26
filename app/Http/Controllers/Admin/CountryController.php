@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\File;
 
 class CountryController extends Controller
 {
-    function __construct() 
+    function __construct()
     {
         $this->middleware(function ($request, $next) {
             checkPermission('is_country');
@@ -42,7 +42,7 @@ class CountryController extends Controller
     public function create()
     {
         checkGate('can_create');
-        
+
         return view('admin.country.create');
     }
 
@@ -55,7 +55,7 @@ class CountryController extends Controller
             'code'         		=> 'required'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
@@ -73,9 +73,9 @@ class CountryController extends Controller
             $img = Image::make($image)->resize(400, 400, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/countries/').$imageRename);
+            })->save('images/countries/'.$imageRename);
         }
-                        
+
         $country = Country::create([
             'name_en'       	=> $request->name_en,
             'name_ar'       	=> $request->name_ar,
@@ -83,7 +83,7 @@ class CountryController extends Controller
           	'code'       		=> $request->code,
           	'status'			=> '1'
         ]);
-        
+
         $success = trans('common.created Successfully');
         return redirect()->route('show_country', $country->id)->with('success', $success);
     }
@@ -108,7 +108,7 @@ class CountryController extends Controller
         checkGate('can_edit');
 
         $country = Country::find($id);
-        
+
         return view('admin.country.edit', compact('country'));
     }
 
@@ -123,7 +123,7 @@ class CountryController extends Controller
             'code'         		=> 'required'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
@@ -142,7 +142,7 @@ class CountryController extends Controller
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/countries/').$imageRename);
+            })->save('images/countries/'.$imageRename);
 
             $upload_image   = Country::where('id', $country->id)->update(['flag' => $imageRename]);
 
@@ -154,7 +154,7 @@ class CountryController extends Controller
             'name_ar'       	=> $request->name_ar,
             'code'    			=> $request->code
         ]);
-        
+
         $success = trans('common.Updated Successfully');
 
         return redirect()->route('countries')->with('success', $success);
@@ -170,7 +170,7 @@ class CountryController extends Controller
 
         return response()->json(['success' => 'Deleted Successfully']);
     }
-    
+
     public function blockCountry(Request $request)
     {
         $id = $request->id;

@@ -56,7 +56,7 @@ class LoginController extends BaseController
         $request->session()->invalidate();
         return redirect()->route('admin_login');
     }
-    
+
     public function forgetPassword()
     {
         return view('admin.auth.forget_password');
@@ -80,16 +80,16 @@ class LoginController extends BaseController
         $now = Carbon::now()->toDateTimeString();
         $token = DB::table('password_resets_admin')
         ->updateOrInsert(
-            ['email' => $user->email], 
+            ['email' => $user->email],
             ['token' => $generateToken, 'created_at' => $now]
         );
-                        
+
         $name = isset($user->name) ? $user->name : '';
         $from = 'info@zawidha.com';
         $subject = config('app.name') . ' Password Reset Link';
         $to_email = strtolower($user->email);
         $data = array('token' => $generateToken, 'email' => $user->email, 'id' => md5($user->id), 'name' => $name);
-        
+
         Mail::send('email.admin_forget_password', $data, function($message) use ($to_email, $subject, $from) {
             $message->to($to_email)->subject($subject);
             $message->from($from, config('app.name'));
@@ -106,9 +106,9 @@ class LoginController extends BaseController
         $token = request()->get('token');
         // dd($email, $uid, $token);
         $message = 'انتهت صلاحية الرابط';
-        
+
         $existing_email = DB::table('password_resets_admin')->where('email', $email)->first();
-        
+
         if($existing_email)
         {
             $created_at  = new Carbon($existing_email->created_at);
@@ -152,7 +152,7 @@ class LoginController extends BaseController
         }
 
         $existing_email = DB::table('password_resets_admin')->where('email', $request->email)->first();
-                
+
         if($existing_email)
         {
             $user = Admin::where('email', $request->email)->whereRaw('md5(id) = "'.$request->uid.'"')->first();
@@ -171,7 +171,7 @@ class LoginController extends BaseController
             return view('admin.auth.link_expired', compact('message'));
         }
     }
-    
+
     //Edit Profile
 
     public function edit()
@@ -193,7 +193,7 @@ class LoginController extends BaseController
             'password'          => 'required_with:current_password|confirmed'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
@@ -212,7 +212,7 @@ class LoginController extends BaseController
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/admins/').$imageRename);
+            })->save('images/admins/'.$imageRename);
 
             $upload_image   = $admin->update(['image' => $imageRename]);
 
@@ -233,7 +233,7 @@ class LoginController extends BaseController
                 return redirect()->back()->withInput($request->all())->with('error', $error);
             }
         }
-        
+
         $message = 'تم التعديل بنجاح';
 
         return redirect()->route('edit_admin_profile')->with('message', $message);

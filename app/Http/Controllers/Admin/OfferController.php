@@ -81,7 +81,7 @@ class OfferController extends Controller
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/offers/').$imageRename);
+            })->save('images/offers/'.$imageRename);
         } else {
             $imageRename = 'offer_default.png';
         }
@@ -172,7 +172,7 @@ class OfferController extends Controller
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/offers/').$imageRename);
+            })->save('images/offers/'.$imageRename);
 
             $upload_image   = Offer::where('id', $offer->id)->update(['image' => $imageRename]);
 

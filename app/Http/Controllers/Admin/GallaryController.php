@@ -61,7 +61,7 @@ class GallaryController extends Controller
                 $img = Image::make($image)->resize(400, 400, function ($constraint) {
                     $constraint->aspectRatio();
                     $constraint->upsize();
-                })->save(public_path('images/gallary/').$imageRename);
+                })->save('images/gallary/'.$imageRename);
 
                 $gallary = myGallary::create([
                     'name' 			=> 'images/gallary/'.$imageRename,

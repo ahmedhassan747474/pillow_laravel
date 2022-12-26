@@ -20,7 +20,7 @@ use App\Transformers\Admin\PropertyTransformer;
 
 class UserController extends BaseController
 {
-    function __construct() 
+    function __construct()
     {
         $this->middleware(function ($request, $next) {
             checkPermission('is_user');
@@ -48,7 +48,7 @@ class UserController extends BaseController
             $results->select('id', 'name_en as name', 'flag', 'code', 'latitude', 'longitude');
         }
         $countries = $results->get();
-        
+
         return view('admin.users.create', compact('countries'));
     }
 
@@ -63,15 +63,15 @@ class UserController extends BaseController
             'country'       => 'required',
             'image'         => 'nullable|image',
             'email'         => 'required|email|unique:users,email',
-            'password'      => 'required|confirmed'            
+            'password'      => 'required|confirmed'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
         }
-        
+
         if($request->has('image')){
             $image          = $request->image;
             $extension      = $image->getClientOriginalExtension();
@@ -84,13 +84,13 @@ class UserController extends BaseController
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/users/').$imageRename);
+            })->save('images/users/'.$imageRename);
         } else {
             $imageRename = 'user_default.png';
         }
-        
+
         $request['password'] = bcrypt($request->password);
-        
+
         $user = User::create([
             'name'                  =>  $request->name,
             'surename'              =>  $request->surename,
@@ -143,7 +143,7 @@ class UserController extends BaseController
             $results->select('id', 'name_en as name', 'flag', 'code', 'latitude', 'longitude');
         }
         $countries = $results->get();
-        
+
         return view('admin.users.edit', compact('user', 'countries'));
     }
 
@@ -163,7 +163,7 @@ class UserController extends BaseController
             'password'      => 'nullable|confirmed'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
@@ -182,7 +182,7 @@ class UserController extends BaseController
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/users/').$imageRename);
+            })->save('images/users/'.$imageRename);
 
             $upload_image   = User::where('id', $user->id)->update(['image' => $imageRename]);
 
@@ -198,7 +198,7 @@ class UserController extends BaseController
             $password = bcrypt($request->password);
             $updatePassword   = User::where('id', $user->id)->update(['password' => $password]);
         }
-        
+
         $user->update([
             'name'                  =>  $request->name,
             'surename'              =>  $request->surename,
@@ -223,7 +223,7 @@ class UserController extends BaseController
         // return redirect()->route('users');
         return response()->json(['success' => 'Deleted Successfully']);
     }
-    
+
     public function blockUser(Request $request)
     {
         $id = $request->user_id;
@@ -236,7 +236,7 @@ class UserController extends BaseController
         $arr = array('status' => '1', 'data' => [], 'message' => $message);
         return response()->json($arr);
     }
-    
+
     public function filter(Request $request)
     {
         $results = (new User)->newQuery();
@@ -247,7 +247,7 @@ class UserController extends BaseController
                 $q->where('name', 'like', '%'.$request->search_text.'%');
             });
         }
-        
+
         if($request->count != "all")
         {
             if($request->count == '1'){
@@ -287,7 +287,7 @@ class UserController extends BaseController
 
         // $users = $results->paginate(8);
         $users = $results->whereUserType('1')->with('userCountry', 'campaigns')->get();
-        
+
         return view('admin.advertiser.index', compact('users'));
     }
 }

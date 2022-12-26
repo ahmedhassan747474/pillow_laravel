@@ -20,16 +20,16 @@ use Illuminate\Support\Facades\File;
 
 class AdministrationController extends BaseController
 {
-    function __construct() 
+    function __construct()
     {
         $this->middleware(function ($request, $next) {
             checkPermission('is_admin');
             return $next($request);
         });
     }
-    
+
     public function index()
-    {     
+    {
         checkGate('can_show');
 
         $admin = auth()->guard('admin')->user();
@@ -40,14 +40,14 @@ class AdministrationController extends BaseController
         } else {
             $admins = Admin::where('id', '!=', 1)->whereParentId($admin->id)->with('adminPermission.permission')->paginate(20);
         }
-        
+
         return view('admin.admins.index', compact('admins'));
     }
 
     public function create()
-    {        
+    {
         checkGate('can_create');
-        
+
         $permissions = Permission::all();
 
         return view('admin.admins.create', compact('permissions'));
@@ -63,7 +63,7 @@ class AdministrationController extends BaseController
             'permission'    => 'required'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
@@ -80,8 +80,8 @@ class AdministrationController extends BaseController
         $img = Image::make($image)->resize(400, 400, function ($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
-        })->save(public_path('images/admins/').$imageRename);
-                
+        })->save('images/admins/'.$imageRename);
+
         $admin = Admin::create([
             'name'          => $request->name,
             'email'         => $request->email,
@@ -90,7 +90,7 @@ class AdministrationController extends BaseController
             'type'          => '2',
             'parent_id'     => auth()->guard('admin')->user()->id
         ]);
-        
+
         $permission = AdminPermission::create([
             'admin_id'          => $admin->id,
             'permission_id'     => $request->permission,
@@ -105,22 +105,22 @@ class AdministrationController extends BaseController
     }
 
     public function show($id)
-    {        
+    {
         checkGate('can_show');
 
         $admin = Admin::find($id);
-        
+
         $permission = AdminPermission::where('admin_id', $id)->first();
 
         return view('admin.admins.show', compact('admin', 'permission'));
     }
 
     public function edit($id)
-    {        
+    {
         checkGate('can_edit');
 
         $admin = Admin::find($id);
-        
+
         $permissions = Permission::all();
 
         return view('admin.admins.edit',  compact('admin', 'permissions'));
@@ -129,7 +129,7 @@ class AdministrationController extends BaseController
     public function update(Request $request, $id)
     {
         $admin = Admin::find($id);
-        
+
         $validator = Validator::make($request->all(), [
             'name'          => 'required|max:50|string',
             'image'         => 'nullable|image',
@@ -138,12 +138,12 @@ class AdministrationController extends BaseController
             'permission'    => 'required'
         ]);
 
-        if($validator->fails()) 
+        if($validator->fails())
         {
             $error = $validator->errors()->first();
             return redirect()->back()->withInput($request->all())->with('error', $error);
         }
-        
+
         if($request->has('image')){
             $curentPhoto    = $admin->image;
             $image          = $request->image;
@@ -157,7 +157,7 @@ class AdministrationController extends BaseController
             $img = Image::make($image)->resize(null, 700, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save(public_path('images/admins/').$imageRename);
+            })->save('images/admins/'.$imageRename);
 
             $upload_image   = $admin->update(['image' => $imageRename]);
 
@@ -167,16 +167,16 @@ class AdministrationController extends BaseController
                 @unlink($userPhoto);
             }
         }
-        
+
         if ($request->password) {
             $admin->update(['password' => bcrypt($request->password)]);
         }
-        
+
         $admin = Admin::whereId($id)->update([
             'name'          => $request->name,
             'email'         => $request->email
         ]);
-        
+
         $permission = AdminPermission::whereAdminId($id)->update([
             'permission_id'     => $request->permission,
             'can_create'        => $request->can_create == 'on' ? 1 : 0,
@@ -190,7 +190,7 @@ class AdministrationController extends BaseController
     }
 
     public function destroy($id)
-    {        
+    {
         checkGate('can_delete');
 
         $admin = Admin::find($id);
