@@ -22,7 +22,7 @@ use App\Transformers\Admin\PropertyTransformer;
 
 class HotelController extends BaseController
 {
-	function __construct(PropertyTransformer $property_transformer)
+    function __construct(PropertyTransformer $property_transformer)
     {
         $this->property_transformer = $property_transformer;
 
@@ -129,21 +129,21 @@ class HotelController extends BaseController
         // if($request->has('images')){
         // 	foreach ($request->images as $image) {
         // 		$extension      = $image->getClientOriginalExtension();
-	       //      $imageRename    = time(). uniqid() . '.'.$extension;
+        //      $imageRename    = time(). uniqid() . '.'.$extension;
 
-	       //      $path           = public_path("images\properties");
+        //      $path           = public_path("images\properties");
 
-	       //      if(!File::exists($path)) File::makeDirectory($path, 775, true);
+        //      if(!File::exists($path)) File::makeDirectory($path, 775, true);
 
-	       //      $img = Image::make($image)->resize(400, 400, function ($constraint) {
-	       //          $constraint->aspectRatio();
-	       //          $constraint->upsize();
-	       //      })->save(public_path('images/properties/').$imageRename);
+        //      $img = Image::make($image)->resize(400, 400, function ($constraint) {
+        //          $constraint->aspectRatio();
+        //          $constraint->upsize();
+        //      })->save(public_path('images/properties/').$imageRename);
 
-	       //      $hotelImage = PropertyImage::create([
-	       //      	'name' 			=> $imageRename,
-	       //      	'property_id'	=> $hotel->id
-	       //      ]);
+        //      $hotelImage = PropertyImage::create([
+        //      	'name' 			=> $imageRename,
+        //      	'property_id'	=> $hotel->id
+        //      ]);
         // 	}
         // }
 
@@ -344,14 +344,14 @@ class HotelController extends BaseController
 
         $path           = public_path("images\properties");
 
-
         if(!File::exists($path)) File::makeDirectory($path, 775, true);
-
+        $path = 'images/properties/' . $imageRename;
 
         $img = Image::make($image)->resize(400, 400, function ($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
         })->save(   $path );
+
         return response()->json(['message' => 'uploaded', 'data' => $imageRename, 'code' => 200]);
     }
 }
