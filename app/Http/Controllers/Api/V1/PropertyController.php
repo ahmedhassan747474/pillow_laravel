@@ -1299,7 +1299,7 @@ class PropertyController extends BaseController
 
         $property          =       $property->get();
         $property          =       Property::all();
-
+        return 'AAAAAAAAAAAAAAAAA';
     	return response()->json([
     		'data' 			=> $this->property_transformer->transformCollection($property),
     		'status_code' 	=> 200
