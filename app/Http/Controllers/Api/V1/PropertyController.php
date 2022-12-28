@@ -1298,7 +1298,7 @@ class PropertyController extends BaseController
         $property          =       $property->orderBy('distance', 'asc');
 
         $property          =       $property->get();
-        $property          =       Property::get();
+        $property          =       Property::all();
 
     	return response()->json([
     		'data' 			=> $this->property_transformer->transformCollection($property),
