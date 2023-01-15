@@ -267,7 +267,11 @@
                                             <input type="text" name="size" class="form-control" pattern="(\d)+" data-error="{{trans('common.The numeric field may only contain numeric characters.')}}" placeholder="{{trans('common.Enter Size')}}" value="{{ $apartment->size }}" required>
                                         </div>
                                     </div>
-
+                                    <label>{{ __('Drag Your Address') }}</label>
+                                    <div id="map_canvas" class="map-canvas"></div>
+                                    <input type="hidden" id="default_latitude" placeholder="Latitude"/>
+                                    <input type="hidden" id="default_longitude" placeholder="Longitude"/>
+                                    <div id="map_canvas" ></div>
                                     {{-- <div class="form-group">
                                         <label>{{trans('common.Enter Per')}}</label>
                                         <div class="controls">
