@@ -302,6 +302,7 @@
 <script src="{{asset('/admin_asset/app-assets/vendors/js/pickers/pickadate/legacy.js')}}"></script>
 
 <script src="{{asset('/admin_asset/app-assets/js/scripts/pickers/dateTime/pick-a-datetime.js')}}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('PLACE_KEY') }}&libraries=places&callback=initialize"></script>
 
 <!-- <script src="{{asset('/admin_asset/app-assets/vendors/js/extensions/dropzone.min.js')}}"></script> -->
 <!-- <script src="{{asset('/admin_asset/app-assets/vendors/js/dropzone/dropzone.js')}}"></script> -->
@@ -377,5 +378,35 @@
             }
         }
     });
+</script>
+<script>
+    function initialize() {
+        var mapOptions = {
+            zoom: 12,
+            center: new google.maps.LatLng(30.054995683135303, 31.202324918842923),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById('map_canvas'),
+            mapOptions);
+        google.maps.event.addListener(map,'center_changed', function() {
+            document.getElementById('default_latitude').value = map.getCenter().lat();
+            document.getElementById('default_longitude').value = map.getCenter().lng();
+        });
+        $('<div/>').addClass('centerMarker').appendTo(map.getDiv())
+            //do something onclick
+            .click(function() {
+                var that = $(this);
+                if (!that.data('win')) {
+                    that.data('win', new google.maps.InfoWindow({
+                        content: 'this is the center'
+                    }));
+                    that.data('win').bindTo('position', map, 'center');
+                }
+                that.data('win').open(map);
+            });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+
 </script>
 @endsection
