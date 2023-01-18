@@ -5,7 +5,32 @@
 <!-- <script src="{{asset('/admin_asset/app-assets/vendors/js/dropzone/dropzone.css')}}"></script> -->
 <!-- <script src="{{asset('/admin_asset/app-assets/vendors/js/dropzone/basic.css')}}"></script> -->
 <link href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet">
+<style>
+   body,
+html,
+#map_canvas {
+  height: 17em;
+  margin: 0;
+}
 
+#map_canvas .centerMarker {
+  position: absolute;
+  /*url of the marker*/
+  background: url(http://maps.gstatic.com/mapfiles/markers2/marker.png) no-repeat;
+  /*center the marker*/
+  top: 35%;
+  left: 50%;
+  z-index: 1;
+  /*fix offset when needed*/
+  margin-left: -10px;
+  margin-top: -34px;
+  /*size of the image*/
+  height: 34px;
+  width: 20px;
+  cursor: pointer;
+}
+
+    </style>
 @endsection
 @section('page_title')
 {{trans('common.edit apartment')}}
@@ -227,14 +252,14 @@
                                  <div class="form-group">
                                         <label>{{trans('common.Enter Latitude')}}</label>
                                         <div class="controls">
-                                            <input type="text" name="latitude" class="form-control" pattern="^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$" data-error="{{trans('common.The numeric field may only contain numeric characters.')}}" placeholder="{{trans('common.Enter Latitude')}}" value="{{ $apartment->latitude }}" required>
+                                            <input type="text" id="default_latitude" name="latitude" class="form-control" pattern="^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$" data-error="{{trans('common.The numeric field may only contain numeric characters.')}}" placeholder="{{trans('common.Enter Latitude')}}" value="{{ $apartment->latitude }}" required>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label>{{trans('common.Enter Longitude')}}</label>
                                         <div class="controls">
-                                            <input type="text" name="longitude" class="form-control" required pattern="^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$" data-error="{{trans('common.The numeric field may only contain numeric characters.')}}" placeholder="{{trans('common.Enter Longitude')}}" value="{{ $apartment->longitude }}">
+                                            <input type="text" id="default_longitude" name="longitude" class="form-control" required pattern="^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$" data-error="{{trans('common.The numeric field may only contain numeric characters.')}}" placeholder="{{trans('common.Enter Longitude')}}" value="{{ $apartment->longitude }}">
                                         </div>
                                     </div>
 
@@ -269,8 +294,8 @@
                                     </div>
                                     <label>{{ __('Drag Your Address') }}</label>
                                     <div id="map_canvas" class="map-canvas"></div>
-                                    <input type="text" id="default_latitude" placeholder="Latitude"/>
-                                    <input type="text" id="default_longitude" placeholder="Longitude"/>
+                                    <input type="hidden" id="default_latitude" placeholder="Latitude"/>
+                                    <input type="hidden" id="default_longitude" placeholder="Longitude"/>
                                     <div id="map_canvas" ></div>
                                     {{-- <div class="form-group">
                                         <label>{{trans('common.Enter Per')}}</label>
@@ -302,13 +327,12 @@
 <script src="{{asset('/admin_asset/app-assets/vendors/js/pickers/pickadate/legacy.js')}}"></script>
 
 <script src="{{asset('/admin_asset/app-assets/js/scripts/pickers/dateTime/pick-a-datetime.js')}}"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('PLACE_KEY') }}&libraries=places&callback=initialize"></script>
-
 <!-- <script src="{{asset('/admin_asset/app-assets/vendors/js/extensions/dropzone.min.js')}}"></script> -->
 <!-- <script src="{{asset('/admin_asset/app-assets/vendors/js/dropzone/dropzone.js')}}"></script> -->
 <!-- <script src="{{asset('/admin_asset/app-assets/vendors/js/extensions/dropzonejs.js?v=7.0.4')}}"></script> -->
 
 <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('PLACE_KEY') }}&libraries=places&callback=initialize"></script>
 
 <script>
     $('.format-picker-mine').pickadate({
@@ -380,33 +404,33 @@
     });
 </script>
 <script>
-    function initialize() {
-        var mapOptions = {
-            zoom: 12,
-            center: new google.maps.LatLng(30.054995683135303, 31.202324918842923),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        map = new google.maps.Map(document.getElementById('map_canvas'),
-            mapOptions);
-        google.maps.event.addListener(map,'center_changed', function() {
-            document.getElementById('default_latitude').value = map.getCenter().lat();
-            document.getElementById('default_longitude').value = map.getCenter().lng();
-        });
-        $('<div/>').addClass('centerMarker').appendTo(map.getDiv())
-            //do something onclick
-            .click(function() {
-                var that = $(this);
-                if (!that.data('win')) {
-                    that.data('win', new google.maps.InfoWindow({
-                        content: 'this is the center'
-                    }));
-                    that.data('win').bindTo('position', map, 'center');
-                }
-                that.data('win').open(map);
-            });
-    }
+function initialize() {
+  var mapOptions = {
+    zoom: 12,
+    center: new google.maps.LatLng(30.054995683135303, 31.202324918842923),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('map_canvas'),
+    mapOptions);
+  google.maps.event.addListener(map,'center_changed', function() {
+    document.getElementById('default_latitude').value = map.getCenter().lat();
+    document.getElementById('default_longitude').value = map.getCenter().lng();
+  });
+  $('<div/>').addClass('centerMarker').appendTo(map.getDiv())
+    //do something onclick
+    .click(function() {
+      var that = $(this);
+      if (!that.data('win')) {
+        that.data('win', new google.maps.InfoWindow({
+          content: 'this is the center'
+        }));
+        that.data('win').bindTo('position', map, 'center');
+      }
+      that.data('win').open(map);
+    });
+}
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+// google.maps.event.addDomListener(window, 'load', initialize);
 
 </script>
 @endsection
